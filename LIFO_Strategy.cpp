@@ -1,18 +1,16 @@
-#include "trade_proc.h"
+#include "LIFO_Strategy.h"
+
 #include <iostream>
 #include <iomanip>
 
-void TradeProcessor::addTrade(Trade& newTrade) {
+void LIFO_Strategy::addTrade(Trade& newTrade) {
 	std::deque<Trade>& tradeQueue = this->trades[newTrade.symbol];
 	/*
 	 * Check if there are opposite trades to match against
 	 * Opposite trades refers to neighboring trade pairs with different type, which is either Buy-Sell or Sell-Buy.
-	 * Recall that we will use a deque is act as a stack or a queue, depending on the situation.
-	 * Thus we have to peek differently upon condition.
+	 * Check the end since it is LIFO and should act like a stack.
 	 */	
-	bool matchingPairs = this->fifo ?
-        (!tradeQueue.empty() && tradeQueue.front().type != newTrade.type) :
-        (!tradeQueue.empty() && tradeQueue.back().type != newTrade.type);
+	bool matchingPairs = (!tradeQueue.empty() && tradeQueue.back().type != newTrade.type);
 
 	if (matchingPairs) matchTrades(tradeQueue, newTrade);	
     	// If the new trade still has quantity left after trying to match, add it to the deque
@@ -21,11 +19,11 @@ void TradeProcessor::addTrade(Trade& newTrade) {
 	}
 }
 
-void TradeProcessor::matchTrades(std::deque<Trade>& tradeQueue, Trade& newTrade) {
+void LIFO_Strategy::matchTrades(std::deque<Trade>& tradeQueue, Trade& newTrade) {
     	double totalProfit = 0.0;
 
     	while (!tradeQueue.empty() && newTrade.quantity > 0) {
-        	Trade& existingTrade = this->fifo ? tradeQueue.front() : tradeQueue.back();
+        	Trade& existingTrade = tradeQueue.back();
 
             	int matchQuantity = std::min(existingTrade.quantity, newTrade.quantity);
 
@@ -45,10 +43,7 @@ void TradeProcessor::matchTrades(std::deque<Trade>& tradeQueue, Trade& newTrade)
 		//std::cout << "Quantity of existing Trade is now " << existingTrade.quantity << std::endl;
 
 		//Check if the new trade order is fulfilled by existed orders in the deque.
-            	if (existingTrade.quantity == 0) {
-                	this->fifo ? tradeQueue.pop_front() : tradeQueue.pop_back();
-			//std::cout << "popped, the size now is " << tradeQueue.size() << std::endl;
-            	}
+            	if (existingTrade.quantity == 0) tradeQueue.pop_back();
 
             	// Continue matching if the new trade is not yet fully matched
     	}

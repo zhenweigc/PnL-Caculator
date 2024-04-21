@@ -59,8 +59,16 @@ int processCsv(const filesystem::path& filePath, bool method) {
 	
 	// Skip the header line
 	getline(file, line);
-
-	TradeProcessor tp(method);
+	
+	//Setting up strategy
+	std::unique_ptr<MatchStrategy<std::deque<Trade>>> strategy;
+	if (method) {
+		strategy = std::make_unique<FIFO_Strategy>();
+	} else {
+		strategy = std::make_unique<LIFO_Strategy>();
+	}
+	TradeProcessor<std::deque<Trade>> tp(std::move(strategy));
+	
 	cout << "TIMESTAMP,SYMBOL,PNL" << endl;
 
     	while (getline(file, line)) {
