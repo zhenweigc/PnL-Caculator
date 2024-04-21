@@ -1,15 +1,14 @@
+#include "FIFO_Strategy.h"
+
 #include <iostream>
 #include <iomanip>
-
-#include "FIFO_Strategy.h"
 
 void FIFO_Strategy::addTrade(Trade& newTrade) {
 	std::deque<Trade>& tradeQueue = this->trades[newTrade.symbol];
 	/*
 	 * Check if there are opposite trades to match against
 	 * Opposite trades refers to neighboring trade pairs with different type, which is either Buy-Sell or Sell-Buy.
-	 * Recall that we will use a deque is act as a stack or a queue, depending on the situation.
-	 * Thus we have to peek differently upon condition.
+	 * Check its front since it is FIFO.
 	 */	
 	bool matchingPairs = (!tradeQueue.empty()) && tradeQueue.front().type != newTrade.type;
 	
@@ -34,20 +33,13 @@ void FIFO_Strategy::matchTrades(std::deque<Trade>& tradeQueue, Trade& newTrade) 
                 	profit *= -1; // Flip the sign if the new Trade is a buy order.
             	}
 
-            	/*
-		 * Adding up profits and updating quantities.
-		 */
+		// Adding up profits and updating quantities.
 		totalProfit += profit;
             	existingTrade.quantity -= matchQuantity;
             	newTrade.quantity -= matchQuantity;
 
-		//std::cout << "Quantity of new Trade is now " << newTrade.quantity << std::endl;
-		//std::cout << "Quantity of existing Trade is now " << existingTrade.quantity << std::endl;
-
 		//Check if the new trade order is fulfilled by existed orders in the deque.
             	if (existingTrade.quantity == 0) tradeQueue.pop_front();
-
-            	// Continue matching if the new trade is not yet fully matched
     	}
 
         std::cout << newTrade.time << "," << newTrade.symbol << "," << std::fixed << std::setprecision(2) << totalProfit << std::endl ;

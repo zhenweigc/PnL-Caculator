@@ -1,6 +1,6 @@
 #include <deque>
-#include "TradeProcessor.h"
 
+#include "TradeProcessor.h"
 
 template<typename Container>
 std::unique_ptr<TradeProcessor<Container>> TradeProcessor<Container>::instance = nullptr;

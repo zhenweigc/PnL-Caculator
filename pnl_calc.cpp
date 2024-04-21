@@ -1,5 +1,8 @@
 #include "pnl_calc.h"
 
+/**
+ * Check if an input line contains a valid trade record
+ */
 optional<Trade> checkLine(const string& s) {
 	istringstream iss(s);
         string token;
@@ -46,6 +49,9 @@ optional<Trade> checkLine(const string& s) {
 	return t;
 }
 
+/**
+ * Process the given CSV file
+ */
 int processCsv(const filesystem::path& filePath, bool method) {
 	ifstream file(filePath);
 	
@@ -90,7 +96,6 @@ int processCsv(const filesystem::path& filePath, bool method) {
 
 
 int main (int argc, char * argv[]) {
-	
 	/*
 	 * basic sanity check on input arg num
 	 */
