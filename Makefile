@@ -28,6 +28,11 @@ valgrind:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test1.csv FIFO > /dev/null
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test2.csv FIFO > /dev/null
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test3.csv FIFO > /dev/null
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test1.csv LIFO > /dev/null
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test2.csv LIFO > /dev/null
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test3.csv LIFO > /dev/null
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/input.csv FIFO > /dev/null
+
 
 .PHONY: all
 all: clean $(TARGET)
