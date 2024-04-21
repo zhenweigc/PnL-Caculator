@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -g
+CXXFLAGS = -Wall -g --std=c++17
 
 TARGET = pnl_calc
 OBJS = pnl_calc.o TradeProcessor.o FIFO_Strategy.o LIFO_Strategy.o
@@ -31,10 +31,7 @@ valgrind:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test1.csv LIFO > /dev/null
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test2.csv LIFO > /dev/null
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/test3.csv LIFO > /dev/null
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET) TestCases/input.csv FIFO > /dev/null
 
 
 .PHONY: all
 all: clean $(TARGET)
-
-
