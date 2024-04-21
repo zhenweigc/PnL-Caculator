@@ -67,7 +67,8 @@ int processCsv(const filesystem::path& filePath, bool method) {
 	} else {
 		strategy = std::make_unique<LIFO_Strategy>();
 	}
-	TradeProcessor<std::deque<Trade>> tp(std::move(strategy));
+	
+	TradeProcessor<std::deque<Trade>>* tp = TradeProcessor<std::deque<Trade>>::getInstance(std::move(strategy));	
 	
 	cout << "TIMESTAMP,SYMBOL,PNL" << endl;
 
@@ -78,7 +79,7 @@ int processCsv(const filesystem::path& filePath, bool method) {
 		//Continue if line malformed.
 		if (!t) continue;
 
-		tp.addTrade(*t);
+		tp->addTrade(*t);
 		//cout << "good to go" << endl;
 	}
 	
