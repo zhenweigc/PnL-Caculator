@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -Wall -g --std=c++17
 
-TARGET = pnl_calc
+TARGET = pnl_calculator
 OBJS = pnl_calc.o TradeProcessor.o FIFO_Strategy.o LIFO_Strategy.o
 
 $(TARGET): $(OBJS)
