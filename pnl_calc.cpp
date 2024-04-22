@@ -1,5 +1,8 @@
 #include "pnl_calc.h"
 
+/**
+ * Check if an input line contains a valid trade record
+ */
 optional<Trade> checkLine(const string& s) {
 	istringstream iss(s);
         string token;
@@ -46,6 +49,9 @@ optional<Trade> checkLine(const string& s) {
 	return t;
 }
 
+/**
+ * Process the given CSV file
+ */
 int processCsv(const filesystem::path& filePath, bool method) {
 	ifstream file(filePath);
 	
@@ -59,8 +65,17 @@ int processCsv(const filesystem::path& filePath, bool method) {
 	
 	// Skip the header line
 	getline(file, line);
-
-	TradeProcessor tp(method);
+	
+	//Setting up strategy
+	std::unique_ptr<MatchStrategy<std::deque<Trade>>> strategy;
+	if (method) {
+		strategy = std::make_unique<FIFO_Strategy>();
+	} else {
+		strategy = std::make_unique<LIFO_Strategy>();
+	}
+	
+	TradeProcessor<std::deque<Trade>>* tp = TradeProcessor<std::deque<Trade>>::getInstance(std::move(strategy));	
+	
 	cout << "TIMESTAMP,SYMBOL,PNL" << endl;
 
     	while (getline(file, line)) {
@@ -70,7 +85,7 @@ int processCsv(const filesystem::path& filePath, bool method) {
 		//Continue if line malformed.
 		if (!t) continue;
 
-		tp.addTrade(*t);
+		tp->addTrade(*t);
 		//cout << "good to go" << endl;
 	}
 	
@@ -81,7 +96,6 @@ int processCsv(const filesystem::path& filePath, bool method) {
 
 
 int main (int argc, char * argv[]) {
-	
 	/*
 	 * basic sanity check on input arg num
 	 */

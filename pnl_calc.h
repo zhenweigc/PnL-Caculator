@@ -11,7 +11,11 @@
 #include <stdexcept>
 #include <optional>
 
-#include "trade_proc.h"
+#include "Trade.h"
+#include "TradeProcessor.h"
+#include "FIFO_Strategy.h"
+#include "LIFO_Strategy.h"
+
 
 using namespace std;
 
