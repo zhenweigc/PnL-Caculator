@@ -19,7 +19,7 @@ The PnL (Profit and Loss) Calculator is a tool designed to analyze trades and ca
 ### Compiling and Running the Program
 1. Navigate to the project directory.
 2. Run "make" to compile the program.
-3. Run ./pnl_calc <csv_file_address> <method> to run the program
+3. Run ./pnl_calculator <csv_file_address> <method> to run the program
 4. Run "make clean" to clean object files and the executable.
 
 ### Miscellaneous
